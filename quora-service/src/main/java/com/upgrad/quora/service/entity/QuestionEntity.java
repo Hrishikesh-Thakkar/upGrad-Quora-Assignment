@@ -35,6 +35,7 @@ public class QuestionEntity {
     private UsersEntity usersEntity;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<AnswerEntity> answerEntities = new HashSet<>();
 
