@@ -1,6 +1,8 @@
 package com.upgrad.quora.service.entity;
 
 import org.apache.commons.lang3.builder.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -86,10 +88,12 @@ public class UsersEntity implements Serializable {
     private String dob;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<AnswerEntity> answerEntities = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UsersEntity> usersEntities = new HashSet<>();
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<QuestionEntity> questionEntities = new HashSet<>();
 
     @Override
     public boolean equals(Object obj) {
@@ -218,11 +222,11 @@ public class UsersEntity implements Serializable {
         this.answerEntities = answerEntities;
     }
 
-    public Set<UsersEntity> getUsersEntities() {
-        return usersEntities;
+    public Set<QuestionEntity> getQuestionEntities() {
+        return questionEntities;
     }
 
-    public void setUsersEntities(Set<UsersEntity> usersEntities) {
-        this.usersEntities = usersEntities;
+    public void setQuestionEntities(Set<QuestionEntity> questionEntities) {
+        this.questionEntities = questionEntities;
     }
 }
