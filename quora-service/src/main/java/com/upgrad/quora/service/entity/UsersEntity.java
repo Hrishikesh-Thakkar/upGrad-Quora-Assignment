@@ -88,10 +88,12 @@ public class UsersEntity implements Serializable {
     private String dob;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<AnswerEntity> answerEntities = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<QuestionEntity> questionEntities = new HashSet<>();
 
