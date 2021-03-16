@@ -28,7 +28,7 @@ public class CommonService {
             throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get user details");
         }
 
-        final UsersEntity usersEntity = userDao.getUser(userUuid);
+        final UsersEntity usersEntity = userDao.getUserByUUID(userUuid);
 
         if(usersEntity == null){
             throw new UserNotFoundException("USR-001","User with entered uuid does not exist");
