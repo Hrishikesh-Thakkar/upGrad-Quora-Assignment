@@ -1,6 +1,7 @@
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.business.PasswordCryptographyProvider;
+import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UsersEntity;
 import org.springframework.stereotype.Repository;
 
@@ -43,5 +44,20 @@ public class UserDao {
     public UsersEntity createUser(UsersEntity newUsersEntity){
         entityManager.persist(newUsersEntity);
         return newUsersEntity;
+    }
+
+    public UserAuthEntity createUserAuth(UserAuthEntity userAuthEntity) {
+        entityManager.persist(userAuthEntity);
+        return userAuthEntity;
+    }
+
+    public UserAuthEntity getUserAuthEntity(String accessToken){
+        return entityManager.createNamedQuery("userAuthTokenByAccessToken",UserAuthEntity.class).
+                setParameter("accessToken",accessToken).getSingleResult();
+    }
+
+    public UserAuthEntity updateUserAuthEntity(UserAuthEntity userAuthEntity){
+        entityManager.merge(userAuthEntity);
+        return userAuthEntity;
     }
 }

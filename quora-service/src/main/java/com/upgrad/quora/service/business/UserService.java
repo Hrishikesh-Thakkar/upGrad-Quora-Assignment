@@ -1,12 +1,18 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.dao.UserDao;
+import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UsersEntity;
+import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.ZonedDateTime;
 
 @Service
 public class UserService {
@@ -45,5 +51,44 @@ public class UserService {
         userEntity.setSalt(encryptedText[0]);
         userEntity.setPassword(encryptedText[1]);
         return userDao.createUser(userEntity);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public UserAuthEntity authenticate(String username, String password) throws AuthenticationFailedException {
+        UsersEntity usersEntity = userDao.getUserByUsername(username);
+        if(usersEntity == null){
+            throw new AuthenticationFailedException("ATH-001","This username does not exist");
+        }
+
+        final String encryptedPassword = cryptographyProvider.encrypt(password,usersEntity.getSalt());
+
+        if(encryptedPassword.contentEquals(usersEntity.getPassword())){
+            JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
+            UserAuthEntity userAuthEntity = new UserAuthEntity();
+            userAuthEntity.setUsersEntity(usersEntity);
+            final ZonedDateTime now = ZonedDateTime.now();
+            final ZonedDateTime expiresAt = now.plusHours(8);
+            userAuthEntity.setLoginAt(now);
+            userAuthEntity.setExpiresAt(expiresAt);
+            userAuthEntity.setUuid(usersEntity.getUuid());
+            userAuthEntity.setAccessToken(jwtTokenProvider.generateToken(usersEntity.getUuid(),now,expiresAt));
+            userDao.createUserAuth(userAuthEntity);
+            return userAuthEntity;
+        }
+        throw new AuthenticationFailedException("ATH-002","Password failed");
+    }
+
+    public UserAuthEntity getUserAuthByToken(String authorization) throws SignOutRestrictedException {
+        UserAuthEntity userAuthEntity = userDao.getUserAuthEntity(authorization);
+        if(userAuthEntity == null){
+            throw new SignOutRestrictedException("SGR-001","User is not Signed in");
+        }
+        return userAuthEntity;
+    }
+
+    public UserAuthEntity updateUserAuthEntity(UserAuthEntity userAuthEntity){
+        userAuthEntity.setLogoutAt(ZonedDateTime.now());
+        userDao.updateUserAuthEntity(userAuthEntity);
+        return userAuthEntity;
     }
 }
