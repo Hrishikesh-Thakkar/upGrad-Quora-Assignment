@@ -3,10 +3,7 @@ package com.upgrad.quora.service.business;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UsersEntity;
-import com.upgrad.quora.service.exception.AuthenticationFailedException;
-import com.upgrad.quora.service.exception.AuthorizationFailedException;
-import com.upgrad.quora.service.exception.SignOutRestrictedException;
-import com.upgrad.quora.service.exception.SignUpRestrictedException;
+import com.upgrad.quora.service.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,6 +19,14 @@ public class UserService {
 
     @Autowired
     private PasswordCryptographyProvider cryptographyProvider;
+
+    public UsersEntity getUserById(final String userId) throws UserNotFoundException {
+        final UsersEntity usersEntity = userDao.getUserByUUID(userId);
+        if(usersEntity == null){
+            throw new UserNotFoundException("USR-001","User with entered uuid to be deleted does not exist");
+        }
+        return usersEntity;
+    }
 
     public UsersEntity getUserByUsername(final String username) throws SignUpRestrictedException {
         final UsersEntity usersEntity = userDao.getUserByUsername(username);
