@@ -23,7 +23,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method= RequestMethod.POST, path="/user/{userId}", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method= RequestMethod.DELETE, path="/user/{userId}", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> deleteUser(@PathVariable("userId") final String userId, @RequestHeader final String authorization) throws SignOutRestrictedException, AuthorizationFailedException, UserNotFoundException {
         UsersEntity usersEntity = adminService.validateAdminAccess(authorization);
         UsersEntity targetUser = userService.getUserById(userId);
