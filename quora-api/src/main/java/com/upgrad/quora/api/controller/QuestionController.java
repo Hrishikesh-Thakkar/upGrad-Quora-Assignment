@@ -51,7 +51,7 @@ public class QuestionController {
         List<QuestionResponse> questionResponses = questionEntities.stream()
                 .map(p -> new QuestionResponse().id(p.getUuid()).status(p.getContent()))
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(questionResponses,HttpStatus.OK);
+        return new ResponseEntity<List<QuestionResponse>>(questionResponses,HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/edit/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -63,7 +63,7 @@ public class QuestionController {
         questionEntity.setContent(questionEditRequest.getContent());
         questionService.updateQuestion(userAuthByToken.getUsersEntity(),questionEntity);
         QuestionEditResponse questionResponse = new QuestionEditResponse().id(questionEntity.getUuid()).status("QUESTION EDITED");
-        return new ResponseEntity<>(questionResponse,HttpStatus.OK);
+        return new ResponseEntity<QuestionEditResponse>(questionResponse,HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/delete/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -83,7 +83,7 @@ public class QuestionController {
         List<QuestionResponse> questionResponses = questionEntities.stream()
                 .map(p -> new QuestionResponse().id(p.getUuid()).status(p.getContent()))
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(questionResponses,HttpStatus.OK);
+        return new ResponseEntity<List<QuestionResponse>>(questionResponses,HttpStatus.OK);
     }
 }
 
