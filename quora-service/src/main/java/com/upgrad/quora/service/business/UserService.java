@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -75,7 +76,7 @@ public class UserService {
             final ZonedDateTime expiresAt = now.plusHours(8);
             userAuthEntity.setLoginAt(now);
             userAuthEntity.setExpiresAt(expiresAt);
-            userAuthEntity.setUuid(usersEntity.getUuid());
+            userAuthEntity.setUuid(UUID.randomUUID().toString());
             userAuthEntity.setAccessToken(jwtTokenProvider.generateToken(usersEntity.getUuid(),now,expiresAt));
             userDao.createUserAuth(userAuthEntity);
             return userAuthEntity;

@@ -12,6 +12,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "question",schema = "quora")
+@NamedQueries(
+        {
+                @NamedQuery(name = "getAllQuestions", query = "select q from QuestionEntity q"),
+                @NamedQuery(name = "getQuestionById", query = "select q from QuestionEntity q where q.uuid = :uuid"),
+                @NamedQuery(name = "getAllQuestionsById", query = "select q from QuestionEntity q where q.usersEntity.id = :id")
+        })
+
 public class QuestionEntity {
     @Id
     @Column(name = "ID")
