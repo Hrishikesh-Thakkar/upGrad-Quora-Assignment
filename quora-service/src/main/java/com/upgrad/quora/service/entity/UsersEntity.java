@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", schema = "quora")
+@Table(name = "users", schema = "public")
 @NamedQueries(
         {
                 @NamedQuery(name = "userByUuid", query = "select u from UsersEntity u where u.uuid = :uuid"),

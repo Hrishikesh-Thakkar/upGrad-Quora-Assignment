@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "answer", schema = "quora")
+@Table(name = "answer", schema = "public")
 @NamedQueries(
         {
                 @NamedQuery(name = "getAnswersOfQuestion", query = "select a from AnswerEntity a where a.questionEntity.id = :questionId"),

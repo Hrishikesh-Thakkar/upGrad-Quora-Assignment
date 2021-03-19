@@ -30,8 +30,8 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces =  MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") String questionId, @RequestHeader String authorization, @RequestHeader AnswerRequest answerRequest) throws AuthorizationFailedException, InvalidQuestionException {
+    @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", produces =  MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") String questionId, @RequestHeader String authorization, final AnswerRequest answerRequest) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = questionService.getUserAuthByToken(authorization);
         QuestionEntity questionEntity = questionService.getQuestion(questionId);
         AnswerEntity answerEntity = new AnswerEntity();
@@ -45,8 +45,8 @@ public class AnswerController {
         return new ResponseEntity<>(answerResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerEditResponse> editAnswer(@PathVariable("answerId") String answerId, @RequestHeader final String authorization, @RequestHeader AnswerEditRequest answerEditRequest) throws AuthorizationFailedException, AnswerNotFoundException {
+    @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerEditResponse> editAnswer(@PathVariable("answerId") String answerId, @RequestHeader final String authorization, final AnswerEditRequest answerEditRequest) throws AuthorizationFailedException, AnswerNotFoundException {
         UserAuthEntity userAuthEntity = questionService.getUserAuthByToken(authorization);
         AnswerEntity answerEntity = answerService.getAnswerById(answerId,userAuthEntity.getUsersEntity());
         answerEntity.setAns(answerEditRequest.getContent());
@@ -55,7 +55,7 @@ public class AnswerController {
         return new ResponseEntity<AnswerEditResponse>(answerEditResponse,HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId") String answerId, @RequestHeader final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
         UserAuthEntity userAuthEntity = questionService.getUserAuthByToken(authorization);
         AnswerEntity answerEntity = answerService.getAnswerById(answerId,userAuthEntity.getUsersEntity());
@@ -64,7 +64,7 @@ public class AnswerController {
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse,HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/answer/all/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<AnswerResponse>> getAnswersForQuestion(@PathVariable("questionId") String questionId, @RequestHeader final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = questionService.getUserAuthByToken(authorization);
         QuestionEntity questionEntity = questionService.getQuestion(questionId);

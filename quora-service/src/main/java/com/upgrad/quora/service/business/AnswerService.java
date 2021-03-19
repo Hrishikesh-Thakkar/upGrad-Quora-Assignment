@@ -34,7 +34,7 @@ public class AnswerService {
         if(answerEntity == null){
             throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
         }
-        if(!answerEntity.getUsersEntity().equals(usersEntity)){
+        if(!answerEntity.getUsersEntity().getId().equals(usersEntity.getId())){
             throw new AuthorizationFailedException("ATHR-003","Only the answer owner can edit the answer");
         }
         return answerEntity;
