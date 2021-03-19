@@ -60,7 +60,7 @@ public class QuestionService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateQuestion(UsersEntity usersEntity,QuestionEntity questionEntity) throws AuthorizationFailedException {
-        if(!usersEntity.equals(questionEntity.getUsersEntity())){
+        if(!usersEntity.getId().equals(questionEntity.getUsersEntity().getId())){
             throw new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
         }
         questionDao.updateQuestion(questionEntity);
@@ -68,7 +68,7 @@ public class QuestionService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteQuestion(UserAuthEntity userAuthEntity, QuestionEntity questionEntity) throws AuthorizationFailedException {
-        if(!userAuthEntity.getUsersEntity().equals(questionEntity.getUsersEntity())){
+        if(!userAuthEntity.getUsersEntity().getId().equals(questionEntity.getUsersEntity().getId())){
             throw new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
         }
         questionDao.deleteQuestion(questionEntity);

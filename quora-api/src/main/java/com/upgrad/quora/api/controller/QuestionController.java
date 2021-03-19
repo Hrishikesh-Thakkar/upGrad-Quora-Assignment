@@ -45,7 +45,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse,HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/all", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionResponse>> getAllQuestions(@RequestHeader final String authorization) throws AuthorizationFailedException {
         List<QuestionEntity> questionEntities = questionService.getAllQuestions(authorization);
         List<QuestionResponse> questionResponses = questionEntities.stream()
@@ -66,7 +66,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionEditResponse>(questionResponse,HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/delete/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.DELETE, path = "/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@RequestHeader final String authorization,
                                                                  @PathVariable("questionId")String questionId) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = questionService.getUserAuthByToken(authorization);
@@ -76,7 +76,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse,HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/all/{userId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.GET, path = "/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<QuestionResponse>> getAllQuestionsById(@RequestHeader final String authorization, @PathVariable("userId") final String userId) throws AuthorizationFailedException, UserNotFoundException {
         UsersEntity usersEntity = userService.getUserById(userId);
         List<QuestionEntity> questionEntities = questionService.getAllQuestionsById(authorization,usersEntity);
