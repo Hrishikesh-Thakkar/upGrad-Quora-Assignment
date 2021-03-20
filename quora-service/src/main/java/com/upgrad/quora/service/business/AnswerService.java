@@ -20,7 +20,7 @@ public class AnswerService {
     private AnswerDao answerDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public AnswerEntity createAnswer(AnswerEntity answerEntity){
+    public AnswerEntity createAnswer(AnswerEntity answerEntity) {
         return answerDao.createAnswer(answerEntity);
     }
 
@@ -31,11 +31,11 @@ public class AnswerService {
 
     public AnswerEntity getAnswerById(String answerId, UsersEntity usersEntity) throws AnswerNotFoundException, AuthorizationFailedException {
         AnswerEntity answerEntity = answerDao.getAnswerById(answerId);
-        if(answerEntity == null){
-            throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
+        if (answerEntity == null) {
+            throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
-        if(!answerEntity.getUsersEntity().getId().equals(usersEntity.getId())){
-            throw new AuthorizationFailedException("ATHR-003","Only the answer owner can edit the answer");
+        if (!answerEntity.getUsersEntity().getId().equals(usersEntity.getId())) {
+            throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
         }
         return answerEntity;
     }
