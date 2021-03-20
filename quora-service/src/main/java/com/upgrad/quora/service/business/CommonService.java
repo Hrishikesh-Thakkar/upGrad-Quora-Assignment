@@ -22,16 +22,16 @@ public class CommonService {
 
         final UserAuthEntity userAuthEntity = commonDao.getUserAuthEntity(authorizationToken);
 
-        if(userAuthEntity == null){
-            throw new AuthorizationFailedException("ATHR-001","User has not signed in");
-        } else if(userAuthEntity.getLogoutAt() != null){
-            throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get user details");
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        } else if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get user details");
         }
 
         final UsersEntity usersEntity = userDao.getUserByUUID(userUuid);
 
-        if(usersEntity == null){
-            throw new UserNotFoundException("USR-001","User with entered uuid does not exist");
+        if (usersEntity == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid does not exist");
         }
 
         return usersEntity;

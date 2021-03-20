@@ -14,18 +14,18 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void createQuestion(QuestionEntity questionEntity){
+    public void createQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
     }
 
     public List<QuestionEntity> getAllQuestions() {
-        return entityManager.createNamedQuery("getAllQuestions",QuestionEntity.class).getResultList();
+        return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
     }
 
     public QuestionEntity getQuestionById(String questionId) {
-        try{
-            return entityManager.createNamedQuery("getQuestionById",QuestionEntity.class).setParameter("uuid",questionId).getSingleResult();
-        } catch (NoResultException nre){
+        try {
+            return entityManager.createNamedQuery("getQuestionById", QuestionEntity.class).setParameter("uuid", questionId).getSingleResult();
+        } catch (NoResultException nre) {
             return null;
         }
     }
@@ -39,6 +39,6 @@ public class QuestionDao {
     }
 
     public List<QuestionEntity> getAllQuestionsById(Integer id) {
-        return entityManager.createNamedQuery("getAllQuestionsById",QuestionEntity.class).setParameter("id",id).getResultList();
+        return entityManager.createNamedQuery("getAllQuestionsById", QuestionEntity.class).setParameter("id", id).getResultList();
     }
 }

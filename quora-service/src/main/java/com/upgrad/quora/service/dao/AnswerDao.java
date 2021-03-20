@@ -15,29 +15,29 @@ public class AnswerDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public AnswerEntity createAnswer(AnswerEntity answerEntity){
+    public AnswerEntity createAnswer(AnswerEntity answerEntity) {
         entityManager.persist(answerEntity);
         return answerEntity;
     }
 
-    public void deleteAnswer(AnswerEntity answerEntity){
+    public void deleteAnswer(AnswerEntity answerEntity) {
         entityManager.remove(answerEntity);
     }
 
-    public AnswerEntity editAnswer(AnswerEntity answerEntity){
+    public AnswerEntity editAnswer(AnswerEntity answerEntity) {
         entityManager.merge(answerEntity);
         return answerEntity;
     }
 
-    public List<AnswerEntity> getAnswersForQuestion(QuestionEntity questionEntity){
-         return entityManager.createNamedQuery("getAnswersOfQuestion",AnswerEntity.class).
+    public List<AnswerEntity> getAnswersForQuestion(QuestionEntity questionEntity) {
+        return entityManager.createNamedQuery("getAnswersOfQuestion", AnswerEntity.class).
                 setParameter("questionId", questionEntity.getId()).getResultList();
     }
 
     public AnswerEntity getAnswerById(String answerId) {
-        try{
-            return entityManager.createNamedQuery("getAnswerById",AnswerEntity.class).setParameter("answerId",answerId).getSingleResult();
-        } catch(NoResultException nre){
+        try {
+            return entityManager.createNamedQuery("getAnswerById", AnswerEntity.class).setParameter("answerId", answerId).getSingleResult();
+        } catch (NoResultException nre) {
             return null;
         }
     }

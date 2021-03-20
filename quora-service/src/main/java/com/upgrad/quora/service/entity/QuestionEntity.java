@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "question",schema = "public")
+@Table(name = "question", schema = "public")
 @NamedQueries(
         {
                 @NamedQuery(name = "getAllQuestions", query = "select q from QuestionEntity q"),

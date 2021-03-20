@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method= RequestMethod.POST, path="/signup", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.POST, path = "/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
         String username = signupUserRequest.getUserName();
         String email = signupUserRequest.getEmailAddress();
@@ -54,22 +54,22 @@ public class UserController {
         return new ResponseEntity<SignupUserResponse>(signupUserResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method= RequestMethod.POST, path="/signin", consumes= MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.POST, path = "/signin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signin(@RequestHeader final String authorization) throws AuthenticationFailedException {
         byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
         String decodedText = new String(decode);
         String[] decodedArray = decodedText.split(":");
         UserAuthEntity userAuthEntity = userService.authenticate(decodedArray[0], decodedArray[1]);
         SigninResponse signinResponse = new SigninResponse().id(userAuthEntity.getUuid()).message("SIGNED IN SUCCESSFULLY");
-        return new ResponseEntity<SigninResponse>(signinResponse,HttpStatus.OK);
+        return new ResponseEntity<SigninResponse>(signinResponse, HttpStatus.OK);
     }
 
-    @RequestMapping(method= RequestMethod.POST, path="/signout",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.POST, path = "/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signout(@RequestHeader final String authorization) throws SignOutRestrictedException {
         UserAuthEntity userAuthEntity = userService.getUserAuthByToken(authorization);
         userService.updateUserAuthEntity(userAuthEntity);
         SignoutResponse signoutResponse = new SignoutResponse().id(userAuthEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
-        return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
+        return new ResponseEntity<SignoutResponse>(signoutResponse, HttpStatus.OK);
     }
 
 
