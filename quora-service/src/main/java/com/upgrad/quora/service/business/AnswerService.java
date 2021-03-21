@@ -20,8 +20,8 @@ public class AnswerService {
     private AnswerDao answerDao;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public AnswerEntity createAnswer(AnswerEntity answerEntity) {
-        return answerDao.createAnswer(answerEntity);
+    public void createAnswer(AnswerEntity answerEntity) {
+        answerDao.createAnswer(answerEntity);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

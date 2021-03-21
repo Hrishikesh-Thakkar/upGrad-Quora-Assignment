@@ -6,6 +6,8 @@ import com.upgrad.quora.service.entity.UsersEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminService {
@@ -13,6 +15,9 @@ public class AdminService {
     @Autowired
     private UserDao userDao;
 
+    //Validate admin access by first fetching the UserAuthEntity from the accessToken
+    //Check if it is valid and not logged out
+    //Then check the user entity and see that the users entity is admin or nonadmin
     public UsersEntity validateAdminAccess(String accessToken) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthEntity(accessToken);
         if (userAuthEntity == null) {
@@ -29,7 +34,7 @@ public class AdminService {
 
         return userAuthEntity.getUsersEntity();
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(UsersEntity targetUser) {
         userDao.deleteUsersEntity(targetUser);
     }

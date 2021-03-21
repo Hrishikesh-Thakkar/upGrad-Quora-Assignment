@@ -18,6 +18,7 @@ public class CommonService {
     @Autowired
     private CommonDao commonDao;
 
+    //Using User Id and AuthorizationToken to get the UsersEntity by fetching UserAuthEntity
     public UsersEntity getUser(final String userUuid, final String authorizationToken) throws UserNotFoundException, AuthorizationFailedException {
 
         final UserAuthEntity userAuthEntity = commonDao.getUserAuthEntity(authorizationToken);

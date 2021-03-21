@@ -95,9 +95,9 @@ public class UserService {
         return userAuthEntity;
     }
 
-    public UserAuthEntity updateUserAuthEntity(UserAuthEntity userAuthEntity) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserAuthEntity(UserAuthEntity userAuthEntity) {
         userAuthEntity.setLogoutAt(ZonedDateTime.now());
         userDao.updateUserAuthEntity(userAuthEntity);
-        return userAuthEntity;
     }
 }
