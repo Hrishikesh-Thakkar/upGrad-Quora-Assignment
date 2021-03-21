@@ -74,7 +74,7 @@ public class QuestionService {
         questionDao.deleteQuestion(questionEntity);
     }
 
-    public List<QuestionEntity> getAllQuestionsById(String authorization, UsersEntity usersEntity) throws AuthorizationFailedException {
+    public List<QuestionEntity> getAllQuestionsById(String authorization) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthEntity(authorization);
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
