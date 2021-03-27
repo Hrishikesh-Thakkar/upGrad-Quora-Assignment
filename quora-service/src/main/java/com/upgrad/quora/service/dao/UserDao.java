@@ -1,5 +1,7 @@
 package com.upgrad.quora.service.dao;
 
+import com.upgrad.quora.service.entity.AnswerEntity;
+import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UsersEntity;
 import org.springframework.stereotype.Repository;
@@ -65,6 +67,17 @@ public class UserDao {
     }
 
     public void deleteUsersEntity(UsersEntity targetUser) {
-        entityManager.remove(targetUser);
+        for(QuestionEntity questionEntity : targetUser.getQuestionEntities()){
+            entityManager.remove(questionEntity);
+        }
+
+        for(AnswerEntity answerEntity : targetUser.getAnswerEntities()){
+            entityManager.remove(answerEntity);
+        }
+        try {
+            entityManager.createQuery("delete from UsersEntity u where u.uuid = :uuid").setParameter("uuid",targetUser.getUuid()).executeUpdate();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

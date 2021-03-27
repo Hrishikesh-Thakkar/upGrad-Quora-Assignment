@@ -8,8 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -18,7 +18,6 @@ import java.util.Set;
                 @NamedQuery(name = "userByUuid", query = "select u from UsersEntity u where u.uuid = :uuid"),
                 @NamedQuery(name = "userByEmail", query = "select u from UsersEntity u where u.email =:email"),
                 @NamedQuery(name = "userByUsername", query = "select u from UsersEntity u where u.username =:username")
-
         }
 )
 
@@ -89,15 +88,13 @@ public class UsersEntity implements Serializable {
     @Size(max = 30)
     private String dob;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<AnswerEntity> answerEntities = new HashSet<>();
+    private List<AnswerEntity> answerEntities = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<QuestionEntity> questionEntities = new HashSet<>();
+    private List<QuestionEntity> questionEntities = new ArrayList<>();
 
     @Override
     public boolean equals(Object obj) {
@@ -218,19 +215,19 @@ public class UsersEntity implements Serializable {
         this.dob = dob;
     }
 
-    public Set<AnswerEntity> getAnswerEntities() {
+    public List<AnswerEntity> getAnswerEntities() {
         return answerEntities;
     }
 
-    public void setAnswerEntities(Set<AnswerEntity> answerEntities) {
+    public void setAnswerEntities(List<AnswerEntity> answerEntities) {
         this.answerEntities = answerEntities;
     }
 
-    public Set<QuestionEntity> getQuestionEntities() {
+    public List<QuestionEntity> getQuestionEntities() {
         return questionEntities;
     }
 
-    public void setQuestionEntities(Set<QuestionEntity> questionEntities) {
+    public void setQuestionEntities(List<QuestionEntity> questionEntities) {
         this.questionEntities = questionEntities;
     }
 }
