@@ -82,6 +82,6 @@ public class QuestionService {
         if (userAuthEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
         }
-        return questionDao.getAllQuestionsById(userAuthEntity.getId());
+        return questionDao.getAllQuestionsById(userAuthEntity.getUsersEntity().getId());
     }
 }

@@ -11,16 +11,17 @@ import com.upgrad.quora.service.exception.AuthenticationFailedException;
 import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Base64;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -43,14 +44,14 @@ public class UserController {
         newUsersEntity.setUsername(username);
         newUsersEntity.setPassword(signupUserRequest.getPassword());
         newUsersEntity.setFirstName(signupUserRequest.getFirstName());
-        newUsersEntity.setLastName(signupUserRequest.getFirstName());
+        newUsersEntity.setLastName(signupUserRequest.getLastName());
         newUsersEntity.setContactNumber(signupUserRequest.getContactNumber());
         newUsersEntity.setAboutMe(signupUserRequest.getAboutMe());
         newUsersEntity.setCountry(signupUserRequest.getCountry());
         newUsersEntity.setDob(signupUserRequest.getDob());
         newUsersEntity.setRole("nonadmin");
         userService.createUser(newUsersEntity);
-        SignupUserResponse signupUserResponse = new SignupUserResponse().id(newUsersEntity.getUuid()).status("This user has already been registered, try with any other emailId");
+        SignupUserResponse signupUserResponse = new SignupUserResponse().id(newUsersEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(signupUserResponse, HttpStatus.CREATED);
     }
 
@@ -61,7 +62,9 @@ public class UserController {
         String[] decodedArray = decodedText.split(":");
         UserAuthEntity userAuthEntity = userService.authenticate(decodedArray[0], decodedArray[1]);
         SigninResponse signinResponse = new SigninResponse().id(userAuthEntity.getUuid()).message("SIGNED IN SUCCESSFULLY");
-        return new ResponseEntity<SigninResponse>(signinResponse, HttpStatus.OK);
+        MultiValueMap<String,String> headers = new HttpHeaders();
+        headers.put("access_token", Collections.singletonList(userAuthEntity.getAccessToken()));
+        return new ResponseEntity<SigninResponse>(signinResponse,headers,HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
